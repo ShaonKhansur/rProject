@@ -12,10 +12,10 @@ router.post('/', async(req, res) => {
 
   if(req.body.email) {
     const user = await User.findOne({email: req.body.email});
-    if(!user) return res.send('The given email is not registered yet!');
+    if(!user) return res.status(401).send('The given email is not registered yet!');
   
     const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if(!validPassword) return res.send('The given password not matched, try again');
+    if(!validPassword) return res.status(401).send('The given password not matched, try again');
     
     if(validPassword) {
       const token = user.generateAuthToken();
